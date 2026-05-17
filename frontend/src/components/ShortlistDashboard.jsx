@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { matchCandidates, aiShortlist } from '../api';
+import { matchCandidates, aiShortlist, toggleShortlist } from '../api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { BrainCircuit, Filter, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { BrainCircuit, Filter, ChevronRight, CheckCircle2, Bookmark, BookmarkCheck } from 'lucide-react';
 
 const ShortlistDashboard = () => {
   const [reqData, setReqData] = useState({ requiredSkills: '', minExperience: 0 });
@@ -51,6 +51,16 @@ const ShortlistDashboard = () => {
     return 'match-low';
   };
 
+  const handleToggleShortlist = async (id) => {
+    try {
+      const updatedCandidate = await toggleShortlist(id);
+      // Update local state
+      setMatches(matches.map(c => c._id === id ? { ...c, isShortlisted: updatedCandidate.isShortlisted } : c));
+    } catch (error) {
+      console.error('Failed to toggle shortlist:', error);
+    }
+  };
+
   return (
     <div>
       <div className="glass-container" style={{ marginBottom: '2rem' }}>
@@ -92,7 +102,19 @@ const ShortlistDashboard = () => {
               {matches.map(candidate => (
                 <div key={candidate._id} style={{ background: 'var(--surface)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--surface-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
-                    <h3 style={{ margin: 0, fontSize: '1.1rem' }}>{candidate.name}</h3>
+                    <h3 style={{ margin: 0, fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      {candidate.name}
+                      <button 
+                        onClick={() => handleToggleShortlist(candidate._id)}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}
+                        title={candidate.isShortlisted ? "Remove from Shortlist" : "Save to Shortlist"}
+                      >
+                        {candidate.isShortlisted ? 
+                          <BookmarkCheck size={20} color="var(--secondary)" /> : 
+                          <Bookmark size={20} color="var(--text-muted)" />
+                        }
+                      </button>
+                    </h3>
                     <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
                       Exp: {candidate.experience} yrs | Matched: {candidate.matchedSkills.join(', ')}
                     </div>

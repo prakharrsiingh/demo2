@@ -7,6 +7,7 @@ const CandidateSchema = new mongoose.Schema({
   experience: { type: Number, required: true },
   bio: { type: String },
   projects: { type: String },
+  isShortlisted: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
 

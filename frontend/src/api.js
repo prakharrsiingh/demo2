@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'https://demofsd.onrender.com/api';
+// Use environment variable if available, otherwise fallback to local server or render
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const getCandidates = async () => {
   const response = await axios.get(`${API_URL}/candidates`);
@@ -19,5 +20,10 @@ export const matchCandidates = async (matchData) => {
 
 export const aiShortlist = async (matchData) => {
   const response = await axios.post(`${API_URL}/ai/shortlist`, matchData);
+  return response.data;
+};
+
+export const toggleShortlist = async (id) => {
+  const response = await axios.put(`${API_URL}/candidates/${id}/shortlist`);
   return response.data;
 };

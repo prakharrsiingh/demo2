@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getCandidates } from '../api';
-import { Search } from 'lucide-react';
+import { Search, Star } from 'lucide-react';
 
 const CandidateList = () => {
   const [candidates, setCandidates] = useState([]);
@@ -53,7 +53,10 @@ const CandidateList = () => {
             <div key={candidate._id} className="candidate-card">
               <div className="card-header">
                 <div>
-                  <h3 className="card-title">{candidate.name}</h3>
+                  <h3 className="card-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {candidate.name}
+                    {candidate.isShortlisted && <Star size={16} color="var(--secondary)" fill="var(--secondary)" />}
+                  </h3>
                   <span className="card-subtitle">{candidate.email}</span>
                 </div>
                 <div style={{ textAlign: 'right' }}>

@@ -10,6 +10,21 @@ exports.getAllCandidates = async (req, res) => {
   }
 };
 
+// Toggle shortlist status
+exports.toggleShortlist = async (req, res) => {
+  try {
+    const candidate = await Candidate.findById(req.params.id);
+    if (!candidate) return res.status(404).json({ error: 'Candidate not found' });
+    
+    candidate.isShortlisted = !candidate.isShortlisted;
+    await candidate.save();
+    
+    res.json(candidate);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update candidate' });
+  }
+};
+
 // Add a new candidate
 exports.addCandidate = async (req, res) => {
   try {
