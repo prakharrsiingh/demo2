@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Use environment variable if available, otherwise fallback to local server or render
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://candidate-backend-eugn.onrender.com/api';
 
 export const getCandidates = async () => {
   const response = await axios.get(`${API_URL}/candidates`);
